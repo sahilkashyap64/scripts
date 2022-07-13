@@ -11,6 +11,8 @@ node fixDatesWith2DigitYear3.js
 node fixDatewithProperFormat4.js
 ````   
 
+Note: fixDatesWithSpaces1 is complicated,first fix the spelling mistakes manually and then rerun the script
+
 
 |   Format               | Production DB/Total counts | regex to put in match pipline     | Dates             |  Script used                     |
 | ---------------------- | -------------------------- | --------------------------------- | ----------------- | -------------------------------- |
