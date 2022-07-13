@@ -20,9 +20,9 @@ Use these commands to fix the data
 | mm/d/yy                | 1                          | dob:/^\\d{2}\\/\\d{1}\\/\\d{2}$/  | 10/5/67           | fixDatesWith2DigitYear3          |
 | m/d/yy                 | 6                          | dob:/^\\d{1}\\/\\d{1}\\/\\d{2}$/  | 2/2/68            | fixDatesWith2DigitYear3          |
 | yyyy-mm-dd             | 13129                      | dob:/^\\d{4}\\-\\d{2}\\-\\d{2}$/  | 1990-03-22        | fixDatewithProperFormat4         |
-| yy-mm-dd or mm-dd-yy   | 1                          | dob:/^\\d{2}\\-\\d{2}\\-\\d{2}$/  | 90-08-22          | date convert not working on this |
-| mm-dd-yyyy             | 2                          | dob:/^\\d{2}\\-\\d{2}\\-\\d{4}$/  | 12-08-1973        | Method 1                         |
+| yy-mm-dd or mm-dd-yy   | 1                          | dob:/^\\d{2}\\-\\d{2}\\-\\d{2}$/  | 90-08-22          | **pending**                      |
+| mm-dd-yyyy             | 2                          | dob:/^\\d{2}\\-\\d{2}\\-\\d{4}$/  | 12-08-1973        | **pending**                      |
 | m/dd/yy                | 18                         | dob:/^\\d{1}\\/\\d{2}\\/\\d{2}$/  | 4/12/61           | fixDatesWith2DigitYear3          |
 | contains ,             | 33                         | dob: /,/                          | May 22, 1986      | fixDatesWithSpaces1              |
 | contains space         | 23                         | dob: / /                          | Decemeber 03 1993 | fixDatesWithSpaces1              |
-| yyyy                   | 7                          | dob:/^\[0-9\]\*$/                 | 1983              | Method 4/fixDatesWIthYearOnly2   |
+| yyyy                   | 7                          | dob:/^\[0-9\]\*$/                 | 1983              | fixDatesWIthYearOnly2            |
