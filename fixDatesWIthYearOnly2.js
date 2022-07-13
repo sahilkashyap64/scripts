@@ -16,20 +16,23 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
   
     console.log("Dates with only year count:",spaced_dates);
     
-    const ans = await CMDQuestion.askQuestion("Press Y or y to fix the issues? ");
+    const ans = await CMDQuestion.askQuestion("Press y to fix the issues? ");
     console.log("Input :",ans);
-    if(ans=='y'||'Y'){
+    if(ans.toString().trim() === "y"){
       await updateAlldateWithYearString(client);
     }else{
       console.log("unknown input");
     }
     console.log("Database connection closed .");
       client.close();
-  }
- 
-  console.log("Nothing to fix .");
+  }else{
+    
+    console.log("Nothing to fix .");
   console.log("Database connection closed .");
       client.close();
+  }
+ 
+  
 
  
 

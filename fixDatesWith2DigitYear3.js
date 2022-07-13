@@ -17,9 +17,9 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
   
     console.log("Messed Up dates convert(b/w year 2000-3000)",spaced_dates);
     
-    const ans = await CMDQuestion.askQuestion("Press Y or y to fix the issues? ");
+    const ans = await CMDQuestion.askQuestion("Press y to fix the issues? ");
     console.log("Input :",ans);
-    if(ans=='y'||'Y'){
+    if(ans.toString().trim() === "y"){
         await updateAlldateWithUnusualYearString(client);
     }else{
       console.log("unknown input");
@@ -165,7 +165,6 @@ await aggCursor.forEach(res => {
 });
 
 console.log("update AllYearOnlyString");
-console.log("Database connection closed.");
 // client.close();
 
 }
