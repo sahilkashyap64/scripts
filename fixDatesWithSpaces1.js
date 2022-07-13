@@ -18,14 +18,14 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
     
     let theMessedUpMonth=[];
     spaced_dates.forEach(res => {
-      // console.log("findDatesWithSpace",res);
       
       let m1 = res.dob.split(" ")[0];
       theMessedUpMonth.push(m1);
       
     });
     console.log("ProbablytheMessedUpMonth",theMessedUpMonth);
-    console.log("PossibleFix",spellChecker.LookForSuggestion(theMessedUpMonth)); 
+    console.log("PossibleFix of spellings",spellChecker.LookForSuggestion(theMessedUpMonth)); 
+    console.log("Kindly manually fix these entries using _id"); 
     console.log("Database connection closed .");
       client.close();
   }else{
@@ -87,19 +87,7 @@ async function findDatesWithSpace(client){
     // }
   ]
 
-  // db
-  //   .collection(collectionName)
-  //   .aggregate(agg)
-  //   .then(res => {
-  //     console.log(`${res}   successfully.`);
-  //     console.log("Database connection closed.");
-  //     client.close();
-  //   })
-  //   .catch(err => {
-  //     console.log(JSON.stringify(err));
-  //     console.log("Database connection closed.");
-  //     client.close();
-  //   });
+
 
   const aggCursor = db.collection(collectionName).aggregate(agg);
 let theMessedUpIds=[]
@@ -173,30 +161,4 @@ await aggCursor.forEach(res => {
 console.log("updateAlldateString Database connection closed.");
 // client.close();
 
-}
-function insertDataInCollection(client){
-  let dbName = DB_URI.split("/", -1).pop();
-  let collectionName = "ping_results";
-
-  let db = client.db(dbName);
-
-  console.log(`Connected to ${dbName} database successfully.`);
-
-  var data = [
-    { name: 'John', address: 'Highway 71' }
-  ];
-
-  db
-    .collection(collectionName)
-    .insertMany(data)
-    .then(res => {
-      console.log(`${res.insertedCount} Documents inserted successfully.`);
-      console.log("Database connection closed.");
-      client.close();
-    })
-    .catch(err => {
-      console.log(JSON.stringify(err));
-      console.log("Database connection closed.");
-      client.close();
-    });
 }
