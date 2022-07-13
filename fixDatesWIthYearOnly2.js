@@ -1,3 +1,4 @@
+var CMDQuestion=require('./askQuestion.js');
 const MongoClient = require('mongodb').MongoClient;
 const DB_URI = "mongodb://localhost:27017/test";
 const options = {
@@ -13,19 +14,22 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
   let spaced_dates= await findDatesWithYearOnlyCount(client);
   if (spaced_dates.length!==0) {
   
-    console.log("Dates with only year count",spaced_dates);
+    console.log("Dates with only year count:",spaced_dates);
     
-    
+    const ans = await CMDQuestion.askQuestion("Press Y or y to fix the issues? ");
+    console.log("Input :",ans);
+    if(ans=='y'||'Y'){
+      await updateAlldateWithYearString(client);
+    }else{
+      console.log("unknown input");
+    }
     console.log("Database connection closed .");
       client.close();
-  }else{
-
-   await updateAlldateWithYearString(client);
-    console.log("Database connection closed .");
-      client.close();
-
   }
  
+  console.log("Nothing to fix .");
+  console.log("Database connection closed .");
+      client.close();
 
  
 
@@ -39,7 +43,6 @@ async function findDatesWithYearOnlyCount(client){
 
   let db = client.db(dbName);
 
-  console.log(`Connected to ${dbName} database successfully.`);
 
   const agg = [
     {
@@ -74,7 +77,6 @@ async function updateAlldateWithYearString(client){
 
   let db = client.db(dbName);
 
-  console.log(`Connected to ${dbName} database successfully.`);
 const checkAndMergeTheContent=[
   {
     '$match': {
@@ -102,7 +104,7 @@ await aggCursor.forEach(res => {
   
 });
 
-console.log("updateAllYearOnlyString Database connection closed.");
+console.log("YYYY concated with 01-01");
 // client.close();
 
 }
