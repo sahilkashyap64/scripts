@@ -1,3 +1,4 @@
+var CMDQuestion=require('./askQuestion.js');
 const MongoClient = require('mongodb').MongoClient;
 const DB_URI = "mongodb://localhost:27017/test";
 const options = {
@@ -16,14 +17,24 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
   
     console.log("Messed Up dates convert(b/w year 2000-3000)",spaced_dates);
     
+    const ans = await CMDQuestion.askQuestion("Press Y or y to fix the issues? ");
+    console.log("Input :",ans);
+    if(ans=='y'||'Y'){
+        await updateAlldateWithUnusualYearString(client);
+    }else{
+      console.log("unknown input");
+    }
+    
     
     console.log("Database connection closed .");
       client.close();
   }else{
-   await updateAlldateWithUnusualYearString(client);
+    console.log("Nothing to fix .");
+  console.log("Database connection closed .");
       client.close();
-
   }
+
+  
  
 
  
@@ -79,7 +90,7 @@ let theAgregateResult=[]
   });
 
  
-  console.log('findAlldateWithUnusualYearString count',theAgregateResult);
+//   console.log('findAlldateWithUnusualYearString count',theAgregateResult);
       return theAgregateResult;
 
 }
