@@ -71,13 +71,6 @@ async function findAlldateWithUnusualYearString(client){
         }
       }
     }, {
-      $match: {
-        'result': {
-          '$gte': new Date('Sat, 01 Jan 2000 00:00:00 GMT'), 
-          '$lt': new Date('Wed, 31 Dec 3000 00:00:00 GMT')
-        }
-      }
-    }, {
       $count: 'count'
     }
   ];
@@ -157,9 +150,58 @@ const targetAll2digityearANdFixUnusalDateConverts=[
     }
   ];
 
+  const convertallthedates=[
+    {
+      $match: {
+        'dob': {
+          $in: objectIdsArr
+        }
+      }
+    }, {
+      '$project': {
+        'dob': {
+          '$dateFromString': {
+            'dateString': '$dob', 
+            'onError': 'An error occurred', 
+            'onNull': 'Input was null or empty'
+          }
+        }
+      }
+    }, {
+      '$match': {
+        'result': {
+          '$not': {
+            '$gte': new Date('Sat, 01 Jan 2000 00:00:00 GMT'), 
+            '$lt': new Date('Wed, 31 Dec 3000 00:00:00 GMT')
+          }
+        }
+      }
+    }, {
+      '$addFields': {
+        'dob': {
+          '$dateToString': {
+            'format': '%Y-%m-%d', 
+            'date': '$dob'
+          }
+        }
+      }
+    }, {
+      '$merge': {
+        'into': 'dob'
+      }
+    }
+  ];
+
+const aggCursor2 = db.collection(collectionName).aggregate(convertallthedates);
+await aggCursor2.forEach(res => {
+  console.log("aggCursor2 Unusal date convert fixed",res);
+ 
+  
+});
+
 const aggCursor = db.collection(collectionName).aggregate(targetAll2digityearANdFixUnusalDateConverts);
 await aggCursor.forEach(res => {
-  console.log("Unusal date convert fixed",res);
+  console.log(" aggCursor Unusal date convert fixed",res);
  
   
 });
