@@ -1,7 +1,9 @@
 # scripts
 ### Script to fix messed up dates
-#### The scrit requires mongoDB 5
+#### The scrpit requires mongoDB 4 or 5 to use the advanced aggregate pipelines
+
 Use these commands to fix the data
+
 ```sh
 node fixDatesWithSpaces1.js //manually alter the reacord using id
 node fixDatesWIthYearOnly2.js
