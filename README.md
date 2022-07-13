@@ -2,10 +2,12 @@
 ### Script to fix messed up dates
 #### The scrit requires mongoDB 5
 Use these commands to fix the data
-```node fixDatesWithSpaces1.js````  //manually edit the data using _id 
-```node fixDatesWIthYearOnly2.js````   
-```node fixDatesWith2DigitYear3.js````   
-```node fixDatewithProperFormat4.js````   
+```sh
+node fixDatesWithSpaces1.js //manually alter the reacord using id
+node fixDatesWIthYearOnly2.js
+node fixDatesWith2DigitYear3.js
+node fixDatewithProperFormat4.js
+````   
 
 
 |   Format               | Production DB/Total counts | regex to put in match pipline     | Dates             |  Script used                     |
