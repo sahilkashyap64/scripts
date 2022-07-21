@@ -50,11 +50,21 @@ async function findDatesWithYearOnlyCount(client){
   const agg = [
     {
       '$match': {
-        'dob': new RegExp('^[0-9]*$')
+        'dob': new RegExp('^[0-9]*$'), //date with only numbers eg:year
+
+      '__t': 'Customer' // only  target Customer role
       }
+      /**
+       * _id:62d953e458ef6a20fdf30f53
+        dob:"1983"
+        __t:"Customer"
+       */
     }, {
       '$count': 'count'
     }
+    /**
+     * count:7
+     */
   ]
 
 
@@ -83,7 +93,9 @@ async function updateAlldateWithYearString(client){
 const checkAndMergeTheContent=[
   {
     '$match': {
-      'dob': new RegExp('^[0-9]*$')
+      'dob': new RegExp('^[0-9]*$'), //dates with only number
+
+      '__t': 'Customer' // only  target Customer role
     }
   }, {
     '$project': {
@@ -93,10 +105,18 @@ const checkAndMergeTheContent=[
         ]
       }
     }
+    /**Output
+      _id:62d953e458ef6a20fdf30f53
+       dob:"1983-01-01"
+     */
   }, {
     '$merge': {
       'into': 'dob'
     }
+    /**
+     * Note collection name is dob here, yours might be users
+     * merge the dates in collection dob 
+     */
   }
 ];
 
