@@ -32,3 +32,14 @@ Note: fixDatesWithSpaces1 is complicated,first fix the spelling mistakes manuall
 | contains ,             | 33                         | dob: /,/                          | May 22, 1986      | fixDatesWithSpaces1              |
 | contains space         | 23                         | dob: / /                          | Decemeber 03 1993 | fixDatesWithSpaces1              |
 | yyyy                   | 7                          | dob:/^\[0-9\]\*$/                 | 1983              | fixDatesWIthYearOnly2            |
+
+
+-----
+```node fixDatesWithSpaces1.js```
+##### Logic  2 functions
+1. findDatesWithSpace // finds the 'date with spaces' and returns the documentin array which faild during conversion
+2. updateAlldateString // if 1st function returns 0 error then this script fixes the dates and merges them with the document
+![Screenshot from 2022-07-21 19-31-40](https://user-images.githubusercontent.com/32007662/180233410-0c951f03-90af-484e-afae-ff42f586b99d.png)
+
+```
+```
