@@ -43,8 +43,7 @@ Note: fixDatesWithSpaces1 is complicated,first fix the spelling mistakes manuall
 
 -----
 
-```node fixDatesWIthYearOnly2.js
-```
+```node fixDatesWIthYearOnly2.js```
 #####   2 functions used
 1. findDatesWithYearOnlyCount //finds dates with only number eg: 1983
 2. updateAlldateWithYearString // "1983-01-01"
