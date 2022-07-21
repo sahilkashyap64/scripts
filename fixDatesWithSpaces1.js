@@ -11,9 +11,9 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
     return;
   }
 
-  let spaced_dates= await findDatesWithSpace(client);
+  let spaced_dates= await findDatesWithSpace(client); //returns dates with error in array form
   if (spaced_dates.length!==0) {
-  
+  // fix the dates manually and rerun the script
     console.log("The messed up String dates",spaced_dates);
     
     let theMessedUpMonth=[];
@@ -29,7 +29,7 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
     console.log("Database connection closed .");
       client.close();
   }else{
-
+  // all dates with spaces conversion was successfully, so update the strings
    await updateAlldateString(client);
     console.log("Database connection closed .");
       client.close();
@@ -54,7 +54,8 @@ async function findDatesWithSpace(client){
   const agg = [
     {
       '$match': {
-        'dob': new RegExp(' ')
+        'dob': new RegExp(' '), //gets all the dates with spaces
+        '__t': 'Customer' // only  target Customer role
       }
     }, {
       '$project': {
@@ -68,6 +69,12 @@ async function findDatesWithSpace(client){
           }
         }
       }
+
+        /** output
+           _id:62d953e458ef6a20fdf30a23
+            dob:"May 22, 1986"
+           dob2:1986-05-22T00:00:00.000+00:00
+           */  
     }, {
       '$project': {
         'dob': 1, 
@@ -77,10 +84,24 @@ async function findDatesWithSpace(client){
           ]
         }
       }
+
+
+        /** output
+         * dates to string and remove the timezone part
+         _id:62d953e458ef6a20fdf30a23
+         dob:"May 22, 1986"
+        dob2:"1986-05-22"
+         */
+
     }, {
       '$match': {
         'dob2': 'error'
       }
+      /**
+       _id:62d953e458ef6a20fdf30ac0
+       dob:"Decemeber 03 1993"
+       dob2:"error"
+       */
     }, 
     // {
     //   '$count': 'count'
@@ -90,7 +111,8 @@ async function findDatesWithSpace(client){
 
 
   const aggCursor = db.collection(collectionName).aggregate(agg);
-let theMessedUpIds=[]
+    let theMessedUpIds=[]
+    // loop through the last pipeline result and push them in the array
   await aggCursor.forEach(res => {
     // console.log("findDatesWithSpace",res);
     theMessedUpIds.push(res);
@@ -117,7 +139,8 @@ async function updateAlldateString(client){
 const checkAndMergeTheContent=[
   {
     '$match': {
-      'dob': new RegExp(' ')
+      'dob': new RegExp(' '), //date with spaces
+      '__t': 'Customer' // only  target Customer role
     }
   }, {
     '$project': {
@@ -130,12 +153,29 @@ const checkAndMergeTheContent=[
         }
       }
     }
+    /***
+     * 
+     * Project/overwrite, the dob column with new format date column
+     
+       _id:62d953e458ef6a20fdf30a23
+        dob:1986-05-22T00:00:00.000+00:00
+
+        OR 
+
+        _id:62d953e458ef6a20fdf30ac0
+        dob:"error"
+     */
   }, {
     '$match': {
       'dob': {
         '$not': new RegExp('error')
       }
     }
+    /**
+     * Get the dob with not error
+     * _id:62d953e458ef6a20fdf30a23
+       dob:1986-05-22T00:00:00.000+00:00
+     */
   }, {
     '$project': {
       'dob': {
@@ -144,10 +184,21 @@ const checkAndMergeTheContent=[
         ]
       }
     }
+    /**
+     * dates to string and remove the timezone part
+     * _id:62d953e458ef6a20fdf30a23
+       dob:"1986-05-22"
+     */
   }, {
     '$merge': {
       'into': 'dob'
     }
+
+    /**NOTE:
+     * merge the previous result of pipeline with the collection
+     * my collection name is "dob" yours might be "users"
+     */
+
   }
 ];
 
