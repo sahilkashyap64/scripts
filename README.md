@@ -36,10 +36,16 @@ Note: fixDatesWithSpaces1 is complicated,first fix the spelling mistakes manuall
 
 -----
 ```node fixDatesWithSpaces1.js```
-##### Logic  2 functions
+#####   2 functions used
 1. findDatesWithSpace // finds the 'date with spaces' and returns the documentin array which faild during conversion
 2. updateAlldateString // if 1st function returns 0 error then this script fixes the dates and merges them with the document
 ![Screenshot from 2022-07-21 19-31-40](https://user-images.githubusercontent.com/32007662/180233410-0c951f03-90af-484e-afae-ff42f586b99d.png)
 
-```
-```
+-----
+
+```node fixDatesWIthYearOnly2.js```
+#####   2 functions used
+1. findDatesWithYearOnlyCount //finds dates with only number eg: 1983
+2. updateAlldateWithYearString // "1983-01-01"
+![Screenshot from 2022-07-21 19-52-40](https://user-images.githubusercontent.com/32007662/180238957-7d31619c-bfce-42a8-93ed-101f5715902c.png)
+
