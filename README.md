@@ -49,3 +49,14 @@ Note: fixDatesWithSpaces1 is complicated,first fix the spelling mistakes manuall
 2. updateAlldateWithYearString // "1983-01-01"
 ![Screenshot from 2022-07-21 19-52-40](https://user-images.githubusercontent.com/32007662/180238957-7d31619c-bfce-42a8-93ed-101f5715902c.png)
 
+-----
+
+```node fixDatesWith2DigitYear3.js```
+#####   2 functions used
+1. findAlldateWithUnusualYearString //targets m/dd/yy , m/d/yy ,mm/d/yy ,mm/dd/yy and return count
+2. updateAlldateWithUnusualYearString // 2 pipeline used cuz mongo can't process dates below 1970 so 
+  1. fix the converted dates between 2000-3000 
+  2. fix the converted dates not in between 2000-3000  
+ ![Screenshot from 2022-07-21 20-24-43](https://user-images.githubusercontent.com/32007662/180248140-7fc77706-ca9b-449c-9fb1-55b6c7a5bba7.png)
+
+
