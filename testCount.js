@@ -137,13 +137,24 @@ async function countTheDocs(client){
           ]
         }
       }
-      /**TotalRoleTypeCustomer:16189
-DatesWithSpaces:55
-DateWithYearOnly:7
-DatestoaFixedFormat:2877
-Datesyyyy-mm-dd:13166 */
     }
   ];
+  //output on mongocompass aggrgation
+  //TotalRoleTypeCustomer:16155
+// DatesWithSpaces:55
+// DateWithYearOnly:7
+// DatestoaFixedFormat:2876
+// Datesyyyy-mm-dd:13133
+//some  the output on cmd is 
+//some issue
+// count [
+//     {
+//       TotalRoleTypeCustomer: 16155,
+//       DatesWithSpaces: 55,
+//       DateWithYearOnly: 7
+//     }
+//   ]
+  
 
 
 
