@@ -1,6 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
-const DB_URI = "mongodb://localhost:27017/test";
+const DB_URI = "mongodb://localhost:27017";
 const options = {
   useNewUrlParser: true
 };
@@ -27,19 +27,123 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
 
 async function countTheDocs(client){
 
-  let dbName = DB_URI.split("/", -1).pop();
+  let dbName = "test";
   let collectionName = "users";
 
   let db = client.db(dbName);
 
   console.log(`Connected to ${dbName} database successfully.`);
 
-  const agg = [
-    
+  const agg =[
     {
-      '$count': 'count'
+      '$facet': {
+        'TotalRoleTypeCustomer': [
+          {
+            '$match': {
+              '__t': 'Customer'
+            }
+          }, {
+            '$count': 'Total'
+          }
+        ], 
+        'DatesWithSpaces': [
+          {
+            '$match': {
+              'dob': new RegExp(' '), 
+              '__t': 'Customer'
+            }
+          }, {
+            '$count': 'datewithspaces'
+          }
+        ], 
+        'DateWithYearOnly': [
+          {
+            '$match': {
+              'dob': new RegExp('^[0-9]*$'), 
+              '__t': 'Customer'
+            }
+          }, {
+            '$count': 'DateWithYearOnly'
+          }
+        ], 
+        'DateWith2DigitYearOnly': [
+          {
+            '$match': {
+              'dob': {
+                '$in': [
+                  new RegExp('^d{2}\/d{2}\/d{2}$'), new RegExp('^d{2}\/d{1}\/d{2}$'), new RegExp('^d{1}\/d{1}\/d{2}$'), new RegExp('^d{1}\/d{2}\/d{2}$')
+                ]
+              }, 
+              '__t': 'Customer'
+            }
+          }, {
+            '$count': 'DateWith2DigitYearOnly'
+          }
+        ], 
+        'DatestoaFixedFormat': [
+          {
+            '$match': {
+              'dob': {
+                '$in': [
+                  new RegExp('^d{1}\/d{1}\/d{4}$'), new RegExp('^d{4}\/d{2}\/d{2}$'), new RegExp('^d{2}\/d{2}\/d{4}$'), new RegExp('^d{1}\/d{2}\/d{4}$'), new RegExp('^d{2}\/d{1}\/d{4}$')
+                ]
+              }, 
+              '__t': 'Customer'
+            }
+          }, {
+            '$count': 'DatestoaFixedFormat'
+          }
+        ], 
+        'Datesyyyy-mm-dd': [
+          {
+            '$match': {
+              'dob': {
+                '$in': [
+                  new RegExp('^d{4}-d{2}-d{2}$')
+                ]
+              }, 
+              '__t': 'Customer'
+            }
+          }, {
+            '$count': 'Dates'
+          }
+        ]
+      }
+    }, {
+      '$project': {
+        'TotalRoleTypeCustomer': {
+          '$arrayElemAt': [
+            '$TotalRoleTypeCustomer.Total', 0
+          ]
+        }, 
+        'DatesWithSpaces': {
+          '$arrayElemAt': [
+            '$DatesWithSpaces.datewithspaces', 0
+          ]
+        }, 
+        'DateWithYearOnly': {
+          '$arrayElemAt': [
+            '$DateWithYearOnly.DateWithYearOnly', 0
+          ]
+        }, 
+        'DatestoaFixedFormat': {
+          '$arrayElemAt': [
+            '$DatestoaFixedFormat.DatestoaFixedFormat', 0
+          ]
+        }, 
+        'Datesyyyy-mm-dd': {
+          '$arrayElemAt': [
+            '$Datesyyyy-mm-dd.Dates', 0
+          ]
+        }
+      }
+      /**TotalRoleTypeCustomer:16189
+DatesWithSpaces:55
+DateWithYearOnly:7
+DatestoaFixedFormat:2877
+Datesyyyy-mm-dd:13166 */
     }
-  ]
+  ];
 
 
 
