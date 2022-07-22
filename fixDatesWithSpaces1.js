@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectId;
 const DB_URI = "mongodb://localhost:27017/test";
 const options = {
   useNewUrlParser: true
@@ -45,7 +46,7 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
 async function findDatesWithSpace(client){
 
   let dbName = DB_URI.split("/", -1).pop();
-  let collectionName = "dob";
+  let collectionName = "users";
 
   let db = client.db(dbName);
 
@@ -54,6 +55,7 @@ async function findDatesWithSpace(client){
   const agg = [
     {
       '$match': {
+        // '_id': new ObjectId('5a3de4202ec9e168f0834dde'), 
         'dob': new RegExp(' '), //gets all the dates with spaces
         '__t': 'Customer' // only  target Customer role
       }
@@ -131,7 +133,7 @@ async function findDatesWithSpace(client){
 async function updateAlldateString(client){
 
   let dbName = DB_URI.split("/", -1).pop();
-  let collectionName = "dob";
+  let collectionName = "users";
 
   let db = client.db(dbName);
 
@@ -139,6 +141,7 @@ async function updateAlldateString(client){
 const checkAndMergeTheContent=[
   {
     '$match': {
+      // '_id': new ObjectId('5a3de4202ec9e168f0834dde'), 
       'dob': new RegExp(' '), //date with spaces
       '__t': 'Customer' // only  target Customer role
     }
@@ -191,12 +194,12 @@ const checkAndMergeTheContent=[
      */
   }, {
     '$merge': {
-      'into': 'dob'
+      'into': 'users'
     }
 
     /**NOTE:
      * merge the previous result of pipeline with the collection
-     * my collection name is "dob" yours might be "users"
+     * my collection name is "users" yours might be different
      */
 
   }
