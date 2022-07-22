@@ -42,7 +42,7 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
 async function findDatesWithYearOnlyCount(client){
 
   let dbName = DB_URI.split("/", -1).pop();
-  let collectionName = "dob";
+  let collectionName = "users";
 
   let db = client.db(dbName);
 
@@ -86,7 +86,7 @@ let theAgregateResult=[]
 async function updateAlldateWithYearString(client){
 
   let dbName = DB_URI.split("/", -1).pop();
-  let collectionName = "dob";
+  let collectionName = "users";
 
   let db = client.db(dbName);
 
@@ -111,11 +111,11 @@ const checkAndMergeTheContent=[
      */
   }, {
     '$merge': {
-      'into': 'dob'
+      'into': 'users'
     }
     /**
-     * Note collection name is dob here, yours might be users
-     * merge the dates in collection dob 
+     * merge the previous result of pipeline with the collection
+     * my collection name is "users" yours might be different
      */
   }
 ];
