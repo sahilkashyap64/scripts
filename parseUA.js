@@ -14,11 +14,14 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
     console.log(err);
     return;
   }
+  // get the count of docs based on regex
   let overViewofAllDevice= await countTheDocs(client);
+
   for await (const Devices of overViewofAllDevice) {
     console.log("Devices",Devices)
   }
-
+  //count unique ua and filter them using a js lib
+//  await countTheUniqueUAandFilterBasedOnDevice(client);
     console.log("Database connection closed .");
       client.close();
   
@@ -28,6 +31,40 @@ MongoClient.connect(DB_URI, options, async function (err, client) {
 
 
 });
+
+async function countTheUniqueUAandFilterBasedOnDevice(client){
+  let uniqueUAcount= await getUniqueUA(client);
+  let uniqueUAcountValues= uniqueUAcount[0].values;
+  
+  console.log("uniqueUAcount",uniqueUAcount[0].values.length);
+  console.log("----checking  UA it isDesktop or mobile--")
+  let a;
+  let desktopDeviceUAarr = [],
+  mobileDeviceUAarr = [],
+  otherDeviceUAarr  =[] ;
+  for await (const UA of uniqueUAcountValues) {
+  
+    a=useragent.parse(UA);
+    if(a.isDesktop){
+      desktopDeviceUAarr.push(a.source);
+    }
+    if(a.isMobile){
+      
+      mobileDeviceUAarr.push(a.source);
+    
+    }
+    if(!a.isDesktop && !a.isMobile){
+
+      otherDeviceUAarr.push(a.source);
+    }
+  }
+  console.log('\ndesktop devices',desktopDeviceUAarr.length,"\n",
+              'mobile',mobileDeviceUAarr.length,"\n",
+              'other device',otherDeviceUAarr.length,"\n",
+              );
+  console.log("-----------------");
+
+}
 
 
 async function countTheDocs(client){
@@ -138,6 +175,48 @@ const overviewOfAlltheDevice=[
 }
 
 
+
+
+async function getUniqueUA(client){
+
+  let dbName = "test";
+
+  let collectionName = "orders";
+
+  let db = client.db(dbName);
+
+  console.log(`Connected to ${dbName} database successfully.`);
+
+
+  const justUniqueUA =[
+    {
+      '$project': {
+        'userAgent': '$userAgent.ua'
+      }
+    }, {
+      '$group': {
+        '_id': null, 
+        'values': {
+          '$addToSet': '$userAgent'
+        }
+      }
+    }
+  ];
+
+
+
+  const aggCursor = db.collection(collectionName).aggregate(justUniqueUA);
+    let totalCount=[]
+    // loop through the last pipeline result and push them in the array
+  await aggCursor.forEach(res => {
+    // console.log("countTheDocs",res);
+    totalCount.push(res);
+    
+  });
+
+
+      return totalCount;
+}
 
 
 
